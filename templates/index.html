@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Item Recognizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header class="app-header">
+        <h1>Image Item Recognizer</h1>
+    </header>
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#upload-section" class="active-nav">New Analysis</a></li>
+                <li><a href="#history-section">Analysis History</a></li>
+                <li><a href="#batch-section">Batch Processing</a></li>
+                <li><a href="#settings-section">Settings</a></li>
+            </ul>
+        </nav>
+        <main class="content-area">
+            <!-- FR001: Image Upload -->
+            <section id="upload-section" class="card">
+                <h2>1. Upload Image</h2>
+                <input type="file" id="imageUpload" accept="image/png, image/jpeg, image/gif">
+                <p id="uploadStatus"></p>
+            </section>
+
+            <!-- FR002: Image Preview -->
+            <section id="preview-section" class="card">
+                <h2>2. Preview</h2>
+                <img id="imagePreview" src="#" alt="Image Preview">
+            </section>
+
+            <!-- FR011: Custom Item Search (Optional) -->
+            <section id="custom-search-section" class="card">
+                <h2>3. Specify Items to Find (Optional)</h2>
+                <input type="text" id="customItems" placeholder="e.g., phone, watch, ipad, airpod, lipstick"
+                    value="phone, watch, ipad, airpod, lipstick">
+                <small>Enter comma-separated items you want the model to specifically look for.</small>
+            </section>
+
+            <!-- FR004: Model Selection -->
+            <section id="model-selection-section" class="card">
+                <h2>4. Select Ollama Model</h2>
+                <select id="modelSelect">
+                    <!-- Models will be populated by JavaScript -->
+                </select>
+                <button id="refreshModels">Refresh Models</button>
+            </section>
+
+            <!-- FR005: Image Analysis -->
+            <section id="analysis-section" class="card">
+                <h2>5. Analyze Image</h2>
+                <button id="analyzeButton" disabled>Analyze Image</button>
+                <div id="loadingIndicator" style="display:none;">Analyzing... Please wait.</div>
+                <div id="analysisErrorLog" style="color: red; margin-top: 1rem; display:none;"></div>
+            </section>
+
+            <!-- FR006 & FR007: Categorized Results Display & Result Details -->
+            <section id="results-section" class="card">
+                <h2>6. Analysis Results</h2>
+                <div id="resultsDisplay">
+                    <h3>Items Specified for Search:</h3>
+                    <ul id="queriedItemsEchoed"></ul> <!-- New UL for echoed items -->
+
+                    <h3>Found</h3>
+                    <ul id="foundItems"></ul>
+                    <h3>Maybe Found</h3>
+                    <ul id="maybeFoundItems"></ul>
+                    <h3>Not Found</h3>
+                    <ul id="notFoundItems"></ul>
+                    <h3>Raw Model Output (for debugging)</h3>
+                    <pre id="rawOutput"></pre>
+                </div>
+            </section>
+
+            <!-- FR012: Threshold Adjustment (Placeholder) -->
+            <section id="threshold-section" class="card"> <!-- Was hidden, now visible -->
+                <h2>7. Adjust Confidence Thresholds</h2>
+                <div>
+                    <label for="foundThreshold">"Found" Threshold (e.g., 0.8-1.0):</label>
+                    <input type="number" id="foundThresholdHigh" step="0.01" min="0" max="1" value="1.0">
+                    <input type="number" id="foundThresholdLow" step="0.01" min="0" max="1" value="0.8">
+                </div>
+                <div>
+                    <label for="maybeThreshold">"Maybe Found" Threshold (e.g., 0.5-0.79):</label>
+                    <input type="number" id="maybeThresholdHigh" step="0.01" min="0" max="1" value="0.79">
+                    <input type="number" id="maybeThresholdLow" step="0.01" min="0" max="1" value="0.5">
+                </div>
+                <small>"Not Found" will be items below the "Maybe Found" low threshold.</small>
+            </section>
+
+            <!-- Placeholder sections for future features -->
+            <section id="history-section" class="card">
+                <h2>Analysis History</h2>
+                <div id="analysisHistoryList">
+                    <!-- FR010: Past analysis sessions will be dynamically loaded here -->
+                    <p>Past analysis sessions will be listed here.</p>
+                </div>
+            </section>
+            <section id="batch-section" class="card" style="display: none;">
+                <h2>Batch Processing</h2>
+                <p>Upload and manage multiple images for batch analysis. (FR009)</p>
+            </section>
+            <section id="settings-section" class="card" style="display: none;">
+                <h2>Settings</h2>
+                <p>Application and Ollama configuration settings. (FR003, FR012)</p>
+                <div>
+                    <h4>Ollama Configuration</h4>
+                    <p>Status: <span id="ollamaStatus">Unknown</span></p>
+                    <label for="ollamaEndpoint">Ollama API Endpoint:</label>
+                    <input type="text" id="ollamaEndpoint" value="http://localhost:11434">
+                    <button id="checkOllamaConnection">Check Connection</button>
+                </div>
+            </section>
+
+            <div class="output-section" id="raw-output-section" style="display: none;">
+                <h2>Raw Output</h2>
+                <pre id="rawOutput"></pre>
+            </div>
+
+            <!-- FR010: Analysis History Section -->
+            <div class="output-section" id="analysis-history-section">
+                <h2>Analysis History</h2>
+                <p id="noHistoryMessage" style="display: none;">No analysis history found.</p>
+                <div id="analysisHistoryContainer">
+                    <!-- History items will be loaded here by JavaScript -->
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+    </footer>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>
